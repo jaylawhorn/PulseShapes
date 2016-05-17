@@ -1,5 +1,7 @@
 #include "TROOT.h"
+#include "TStyle.h"
 #include "TFile.h"
+#include "TGraph.h"
 #include "TGraphErrors.h"
 #include "TF1.h"
 
@@ -99,7 +101,26 @@ void Analysis() {
 
   //cout << pulse(&t) << endl;
 
-  PrintPulse(*min->X());
+  TGraph *gfit = new TGraph(0);
+
+  for (UInt_t i=0; i<10; i++) {
+    double tmpX=i, tmpT=*min->X();
+    gfit->SetPoint(i,i, pulse.evalPulse(&tmpX, &tmpT));
+  }
+
+  g->SetMarkerColor(kBlack);
+  g->SetMarkerStyle(20);
+  //g->SetMarkerSize(20);
+  g->SetLineColor(kBlack);
+
+  gfit->SetMarkerColor(kRed);
+  gfit->SetMarkerStyle(20);
+  gfit->SetLineColor(kRed);
+
+  g->Draw("ape");
+  gfit->Draw("p same");
+
+  //PrintPulse(*min->X());
 
 };
 

@@ -52,8 +52,8 @@ void draw() {
     Double_t sumQ=0;
     for (UInt_t j=0; j<10; j++) { sumQ+=(pulse[j]-ped[j]); }
     //if (sumQ<100 || sumQ>120) continue;
-    //if (sumQ<60 || sumQ>80) continue;
-    if (sumQ<200 || sumQ>250) continue;
+    if (sumQ<60 || sumQ>80) continue;
+    //if (sumQ<200 || sumQ>250) continue;
 
     nPulses++;
 
