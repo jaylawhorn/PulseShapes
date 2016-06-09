@@ -60,6 +60,8 @@ public:
     // !!!! gonna have a bad time if you call this before setDataPulse, should fix!!!!!
     double rawtslew=13.307784-1.556668*log(dataPulse[4]*qavg);
     tslew=(rawtslew<0)?(0):((rawtslew>10)?(10):(rawtslew));
+    cout << qavg << ", " << tslew << endl;
+    //tslew=0;
   }
 
   double operator()(const double *t) {
@@ -96,88 +98,85 @@ private:
 void PrintPulse(float thpd);
 void DrawChi2();
 
-void Analysis(Int_t i=0, Double_t start=4.0) {
-  
-  //DrawChi2();
+void simpleComp() {
   
   char gname[50];
-  char pname[50];
-  
-  sprintf(gname, "graph_%i",i);
-  sprintf(pname, "bin_%i.png",i);
-  
-  TFile *infile = new TFile("test_hist.root");
-  TGraphErrors *g = (TGraphErrors*) infile->Get(gname);
-  
-  ROOT::Math::Minimizer *min = ROOT::Math::Factory::CreateMinimizer("Minuit2","Migrad");
-  min->SetMaxFunctionCalls(100000000);
-  min->SetStrategy(2);
-  min->SetTolerance(.001);
-  min->SetPrintLevel(1);
-  
+
+  TFile *infile = new TFile("thegraphs2.root");
+  TGraphErrors *g;
+
   PulseSimple pulse = PulseSimple();
-  pulse.setDataPulse(*g);
-  pulse.setTimeSlew(25*i+12.5);
-  
-  double step[1] = {10.0};
-  double variable[1] = {start};
-  
-  ROOT::Math::Functor f(pulse,1);
-  
-  min->SetFunction(f);
-  min->SetVariable(0, "thpd", variable[0], step[0]);
-  
-  min->Minimize();
-  
-  cout << *min->X() << ", " << min->MinValue() << endl;
-  
-  char fval[100];
-  sprintf(fval, "t_{hpd}=%.3f", *min->X());
-  
-  TGraph *gfit = new TGraph(0);
-  
-  for (UInt_t i=0; i<10; i++) {
-    double tmpX=i, tmpT=*min->X();
-    gfit->SetPoint(i,i, pulse.evalPulse(&tmpX, &tmpT));
+
+  vector<TGraph*> gdiff;
+  vector<TGraph*> gdata;
+  vector<TGraph*> gtemp;
+  for (Int_t i=0; i<10; i++) { 
+    gdiff.push_back(new TGraph(0)); 
   }
   
-  TCanvas *c1 = new TCanvas("c1", "c1", 800, 600);
-  TLegend *l = new TLegend(0.75, 0.75, 0.9, 0.9);
-  l->SetShadowColor(0); l->SetFillColor(0);
-  
-  TPaveText *pt = new TPaveText(0.15,0.8,0.3,0.89,"NDC");
-  pt->SetShadowColor(0); pt->SetFillColor(0); pt->SetLineColor(0);
-  pt->AddText(fval);
-  
-  g->SetMarkerColor(kBlack);
-  g->SetMarkerStyle(20);
-  //g->SetMarkerSize(20);
-  g->SetLineColor(kBlack);
-  
-  l->AddEntry(g, "Data", "p");
-  
-  gfit->SetMarkerColor(kRed);
-  gfit->SetMarkerStyle(20);
-  gfit->SetLineColor(kRed);
-  
-  //l->AddEntry(gfit, "Fit", "p");
-  l->AddEntry(gfit, "Model", "p");
-  
-  g->GetYaxis()->SetRangeUser(0,1);
-  g->GetYaxis()->SetTitle("Normalized Pulse Shape");
-  g->GetXaxis()->SetTitle("Time Slice");
-  g->SetTitle("");
-  g->Draw("ape");
-  gfit->Draw("p same");
-  
-  l->Draw();
-  pt->Draw();
-  
-  c1->SaveAs(pname);
+  for (UInt_t i=0; i<58; i++) {
+    gdata.push_back(new TGraph(0));
+    gtemp.push_back(new TGraph(0));
+    
+    sprintf(gname, "q_%i_%i",20+10*i,30+10*i);
+    g = (TGraphErrors*) infile->Get(gname);
+    
+    pulse.setDataPulse(*g);
+    pulse.setTimeSlew(25+10*i);
+    
+    double tmpT=4.0; // default in CMSSW
+    for (UInt_t j=0; j<10; j++) {
+      double tmpX=j;
+      double x,y;
+      g->GetPoint(j,x,y);
+      //gdata[i]->SetPoint(j,j,y);
+      //gtemp[i]->SetPoint(j,j,pulse.evalPulse(&tmpX, &tmpT));
+      gdiff[j]->SetPoint(i,25+10*i,y-pulse.evalPulse(&tmpX, &tmpT));
+      //gdiff[j]->SetPoint(i,25+10*i,pulse.evalPulse(&tmpX, &tmpT));
+      //gdiff[j]->SetPoint(i,25+10*i,y);
+    }
+  }
 
-  //PrintPulse(*min->X());
+  /* TCanvas *c1 = new TCanvas("c1", "c1", 800, 600);
 
-};
+  char pname[50];
+  char title[50];
+  for (UInt_t i=0; i<10; i++) {
+    sprintf(pname,"TS%i_diff_noslew.png",i);
+    sprintf(title,"TS%i",i);
+    
+    gdiff[i]->SetMarkerStyle(20);
+    gdiff[i]->GetYaxis()->SetTitle("Data-Template");
+    gdiff[i]->GetXaxis()->SetTitle("Q");
+    gdiff[i]->SetTitle(title);
+    gdiff[i]->Draw("ap");
+    
+    //c1->SaveAs(pname);
+    }*/
+
+  //for (UInt_t i=0; i<58; i++) {
+  //  sprintf(pname, "bin_%i.png", i);
+  //  sprintf(title,"%i < Q_{10} < %i",20+10*i, 30+10*i);
+  //
+  //  gdata[i]->SetMarkerStyle(20);
+  //  gdata[i]->SetLineWidth(3);
+  //  gtemp[i]->SetMarkerStyle(20);
+  //  gtemp[i]->SetMarkerColor(kRed);
+  //  gtemp[i]->SetLineColor(kRed);
+  //  gtemp[i]->SetLineWidth(3);
+  //
+  //  gdata[i]->GetYaxis()->SetTitle("Fractional Containment");
+  //  gdata[i]->GetXaxis()->SetTitle("Time Slice");
+  //  gdata[i]->SetTitle(title);
+  //  gdata[i]->GetYaxis()->SetRangeUser(-0.01,1.1);
+  //  gdata[i]->Draw("apl");
+  //  gtemp[i]->Draw("same pl");
+  //
+  //  c1->SaveAs(pname);
+  //
+  //}
+
+}
 
 void DrawChi2() {
 

@@ -37,42 +37,42 @@ void draw() {
   chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_109.root");
   chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_11.root");
   chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_110.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_111.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_112.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_113.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_114.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_115.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_116.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_117.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_118.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_119.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_12.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_120.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_121.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_122.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_123.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_124.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_125.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_126.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_127.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_128.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_129.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_13.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_130.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_131.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_132.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_133.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_134.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_135.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_136.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_137.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_138.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_139.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_14.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_140.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_141.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_142.root");
-  chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_143.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_111.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_112.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_113.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_114.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_115.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_116.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_117.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_118.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_119.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_12.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_120.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_121.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_122.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_123.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_124.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_125.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_126.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_127.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_128.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_129.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_13.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_130.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_131.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_132.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_133.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_134.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_135.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_136.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_137.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_138.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_139.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_14.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_140.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_141.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_142.root");
+  //chain->AddFile("/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_143.root");
   
   cout << chain->GetEntries() << endl;
 
@@ -116,20 +116,10 @@ void draw() {
 
     nPulses[ibin]++;
 
-    Double_t tmpUnc[10];
-    Double_t uncNorm=0;
-
     for (UInt_t j=0; j<10; j++) { 
-      tmpUnc[j]=sqrt(sigma(pulse[j])*sigma(pulse[j])+1);
-      uncNorm+=tmpUnc[j];
-    }
-
-    for (UInt_t j=0; j<10; j++) { 
-      tmpUnc[j]/=uncNorm;
-
       avgPulse[ibin][j]+=pulse[j]/sumQ;
       avgPulse2[ibin][j]+=pulse[j]*pulse[j]/sumQ;
-      adcUnc[ibin][j]+=tmpUnc[j]*tmpUnc[j];
+      adcUnc[ibin][j]+=(sigma(pulse[j])*sigma(pulse[j])+1)/(pulse[j]*pulse[j]);
     }
 
   }
