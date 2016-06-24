@@ -17,10 +17,10 @@ eval `scramv1 runtime -sh`
 cd ${workDir}
 which root
 
-cp ${builddir}/src/PulseShapes/makeHists.C .
+cp ${builddir}/src/PulseShapes/rmsFix.C .
 cp ${builddir}/src/PulseShapes/rootlogon.C .
 
-root -l -q makeHists.C+\(\"root://eoscms//eos/cms/${eosfolder}${file}\",\"${outfolder}${file}\"\)
+root -l -q rmsFix.C+\(\"root://eoscms//eos/cms/${eosfolder}${file}\",\"${outfolder}${file}\"\)
 
 #cp Output.root ${outfolder}${file}
 

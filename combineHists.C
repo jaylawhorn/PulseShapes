@@ -21,8 +21,9 @@ double sigma(double ifC) {
 
 void combineHists(//TString infile="blah2.root",
 		  TString infile="/afs/cern.ch/work/j/jlawhorn/HighPtJet80/HCALTree_all.root",
-		  TString outfile="HCALTree_all.root") {
-  //TString outfile="HCALTree_test.root") {
+		  //TString infile="/afs/cern.ch/work/j/jlawhorn/QCD_Pt-15to7000_TuneCUETP8M1_Flat_13TeV_pythia8/HCALTree_all.root",
+		  //TString outfile="HCALTree_mc_all.root") {
+		  TString outfile="HCALTree_test.root") {
   
   float binsize=10;
   float binstart=20;
@@ -34,22 +35,22 @@ void combineHists(//TString infile="blah2.root",
   const int nbin=58;
 
   Int_t nPulses[nbin];
-  Double_t avgPulse[nbin][10];//, avgPulse2[nbin][10], adcUnc[nbin][10];
+  Double_t avgPulse[nbin][10], avgPulse2[nbin][10];//, adcUnc[nbin][10];
   //Double_t ucut[nbin], lcut[nbin];
 
   chain->SetBranchAddress("nPulses",   &nPulses   );
   //chain->SetBranchAddress("ucut",      &ucut      );
   //chain->SetBranchAddress("lcut",      &lcut      );
   chain->SetBranchAddress("avgPulse",  &avgPulse  );
-  //chain->SetBranchAddress("avgPulse2", &avgPulse2 );
+  chain->SetBranchAddress("avgPulse2", &avgPulse2 );
   //chain->SetBranchAddress("adcUnc",    &adcUnc    );
   
   Int_t sumNPulses[nbin];  
-  Double_t sumAvgPulse[nbin][10];//, sumAvgPulse2[nbin][10], sumAdcUnc[nbin][10];//, sumTotUnc[nbin][10]; 
+  Double_t sumAvgPulse[nbin][10], sumAvgPulse2[nbin][10];//, sumAdcUnc[nbin][10];//, sumTotUnc[nbin][10]; 
 
   for (UInt_t i=0; i<nbin; i++) {
     sumNPulses[i]=0;
-    for (UInt_t j=0; j<10; j++) {sumAvgPulse[i][j]=0; /*sumAvgPulse2[i][j]=0; sumAdcUnc[i][j]=0; totUnc[i][j]=0;*/}
+    for (UInt_t j=0; j<10; j++) {sumAvgPulse[i][j]=0; sumAvgPulse2[i][j]=0; /*sumAdcUnc[i][j]=0; totUnc[i][j]=0;*/}
   }
 
   for (UInt_t i=0; i<chain->GetEntries(); i++) {
@@ -71,7 +72,8 @@ void combineHists(//TString infile="blah2.root",
 	sumAvgPulse[j][k]+=avgPulse[j][k];
 	//if (k==0 && j==0) cout << j << ", " << k << ", " << sumAvgPulse[0][0] << endl;
 	//if (k==0)cout << j << ", " << k << ", " << sumAvgPulse[0][0] << endl;
-	//sumAvgPulse2[j][k]+=avgPulse[j][k]*avgPulse[j][k];
+	sumAvgPulse2[j][k]+=avgPulse2[j][k];
+	//cout << sumAvgPulse2[j][k] << endl;
 	//sumAdcUnc[j][k]+=adcUnc[j][k];
       }
       
@@ -98,9 +100,11 @@ void combineHists(//TString infile="blah2.root",
       x=j;
       //y=(sumAvgPulse[i][j]/sumNPulses[i]-y0)/(1.0-10*y0);
       y=(sumAvgPulse[i][j]/sumNPulses[i]);
-      dy=0;//sqrt(sumAdcUnc[i][j]/nPulses[i]);
-      if (i<2)cout << j << ", " << y << ", " << nPulses[i] << endl;
-      //if (i<2)cout << j << ", " << x << ", " << y << ", " << dy << endl;
+      //cout << sumAvgPulse2[i][j] << ", " << sumAvgPulse[i][j]*sumAvgPulse[i][j]/sumNPulses[i] << endl;
+      dy=TMath::Max(sumAvgPulse2[i][j]-sumAvgPulse[i][j]*sumAvgPulse[i][j]/sumNPulses[i], 0.0);
+      dy=sqrt(dy/sumNPulses[i]);
+      //if (i<2)cout << j << ", " << y << ", " << nPulses[i] << endl;
+      if (i<2)cout << j << ", " << x << ", " << y << ", " << dy << endl;
 
       gr[i]->SetPoint(j,x,y);
       gr[i]->SetPointError(j,0,dy);

@@ -60,7 +60,7 @@ public:
     // !!!! gonna have a bad time if you call this before setDataPulse, should fix!!!!!
     double rawtslew=13.307784-1.556668*log(dataPulse[4]*qavg);
     tslew=(rawtslew<0)?(0):((rawtslew>10)?(10):(rawtslew));
-    cout << qavg << ", " << tslew << endl;
+    //cout << qavg << ", " << tslew << endl;
     //tslew=0;
   }
 
@@ -102,79 +102,116 @@ void simpleComp() {
   
   char gname[50];
 
-  TFile *infile = new TFile("thegraphs2.root");
-  TGraphErrors *g;
+  TFile *infileMC = new TFile("thegraphs_mc.root");
+  TFile *infileData = new TFile("thegraphs_data.root");
+  TGraphErrors *gMC, *gData;
 
   PulseSimple pulse = PulseSimple();
 
-  vector<TGraph*> gdiff;
+  vector<TGraph*> gdiffData;
+  vector<TGraph*> gdiffMC;
   vector<TGraph*> gdata;
+  vector<TGraph*> gmc;
   vector<TGraph*> gtemp;
+
   for (Int_t i=0; i<10; i++) { 
-    gdiff.push_back(new TGraph(0)); 
+    gdiffData.push_back(new TGraph(0)); 
+    gdiffMC.push_back(new TGraph(0)); 
   }
   
   for (UInt_t i=0; i<58; i++) {
     gdata.push_back(new TGraph(0));
+    gmc.push_back(new TGraph(0));
     gtemp.push_back(new TGraph(0));
     
     sprintf(gname, "q_%i_%i",20+10*i,30+10*i);
-    g = (TGraphErrors*) infile->Get(gname);
+    gMC = (TGraphErrors*) infileMC->Get(gname);
+    gData = (TGraphErrors*) infileData->Get(gname);
     
-    pulse.setDataPulse(*g);
+    pulse.setDataPulse(*gData);
     pulse.setTimeSlew(25+10*i);
     
     double tmpT=4.0; // default in CMSSW
     for (UInt_t j=0; j<10; j++) {
       double tmpX=j;
-      double x,y;
-      g->GetPoint(j,x,y);
-      //gdata[i]->SetPoint(j,j,y);
-      //gtemp[i]->SetPoint(j,j,pulse.evalPulse(&tmpX, &tmpT));
-      gdiff[j]->SetPoint(i,25+10*i,y-pulse.evalPulse(&tmpX, &tmpT));
+      double x,y, y2;
+
+      gMC->GetPoint(j,x,y);
+      gData->GetPoint(j,x,y2);
+      gdata[i]->SetPoint(j,j,y2);
+      gmc[i]->SetPoint(j,j,y);
+      gtemp[i]->SetPoint(j,j,pulse.evalPulse(&tmpX, &tmpT));
+      gdiffMC[j]->SetPoint(i,25+10*i,y-pulse.evalPulse(&tmpX, &tmpT));
+      gdiffData[j]->SetPoint(i,25+10*i,y2-pulse.evalPulse(&tmpX, &tmpT));
       //gdiff[j]->SetPoint(i,25+10*i,pulse.evalPulse(&tmpX, &tmpT));
       //gdiff[j]->SetPoint(i,25+10*i,y);
     }
   }
 
-  /* TCanvas *c1 = new TCanvas("c1", "c1", 800, 600);
+  TCanvas *c1 = new TCanvas("c1", "c1", 800, 600);
+
+  TLegend *l = new TLegend(0.7, 0.7, 0.9, 0.9);
+  l->SetFillColor(0); l->SetShadowColor(0);
 
   char pname[50];
   char title[50];
+
   for (UInt_t i=0; i<10; i++) {
-    sprintf(pname,"TS%i_diff_noslew.png",i);
+    sprintf(pname,"TS%i_diff.png",i);
     sprintf(title,"TS%i",i);
     
-    gdiff[i]->SetMarkerStyle(20);
-    gdiff[i]->GetYaxis()->SetTitle("Data-Template");
-    gdiff[i]->GetXaxis()->SetTitle("Q");
-    gdiff[i]->SetTitle(title);
-    gdiff[i]->Draw("ap");
-    
-    //c1->SaveAs(pname);
-    }*/
+    l->Clear();
+    gdiffMC[i]->SetMarkerStyle(20);
+    gdiffMC[i]->SetMarkerColor(kBlue);
+    gdiffData[i]->SetMarkerStyle(20);
+    gdiffData[i]->GetYaxis()->SetRangeUser(-0.15,0.15);
+    gdiffData[i]->GetYaxis()->SetTitle("Sample-Template");
+    gdiffData[i]->GetXaxis()->SetTitle("Q");
+    gdiffData[i]->SetTitle(title);
+    gdiffData[i]->Draw("ap");
+    gdiffMC[i]->Draw("same p");
 
-  //for (UInt_t i=0; i<58; i++) {
-  //  sprintf(pname, "bin_%i.png", i);
-  //  sprintf(title,"%i < Q_{10} < %i",20+10*i, 30+10*i);
-  //
-  //  gdata[i]->SetMarkerStyle(20);
-  //  gdata[i]->SetLineWidth(3);
-  //  gtemp[i]->SetMarkerStyle(20);
-  //  gtemp[i]->SetMarkerColor(kRed);
-  //  gtemp[i]->SetLineColor(kRed);
-  //  gtemp[i]->SetLineWidth(3);
-  //
-  //  gdata[i]->GetYaxis()->SetTitle("Fractional Containment");
-  //  gdata[i]->GetXaxis()->SetTitle("Time Slice");
-  //  gdata[i]->SetTitle(title);
-  //  gdata[i]->GetYaxis()->SetRangeUser(-0.01,1.1);
-  //  gdata[i]->Draw("apl");
-  //  gtemp[i]->Draw("same pl");
-  //
-  //  c1->SaveAs(pname);
-  //
-  //}
+    l->AddEntry(gdiffMC[i], "MC-Template", "p");
+    l->AddEntry(gdiffData[i], "Data-Template", "p");
+    l->Draw();
+    
+    c1->SaveAs(pname);
+  }
+
+
+  /*  for (UInt_t i=0; i<58; i++) {
+    sprintf(pname, "bin_%i.png", i);
+    sprintf(title,"%i < Q_{10} < %i",20+10*i, 30+10*i);
+    l->Clear();
+  
+    gdata[i]->SetMarkerStyle(20);
+    gdata[i]->SetLineWidth(3);
+    gmc[i]->SetMarkerStyle(20);
+    gmc[i]->SetLineWidth(3);
+    gmc[i]->SetMarkerColor(kBlue);
+    gmc[i]->SetLineColor(kBlue);
+    gtemp[i]->SetMarkerStyle(20);
+    gtemp[i]->SetMarkerColor(kRed);
+    gtemp[i]->SetLineColor(kRed);
+    gtemp[i]->SetLineWidth(3);
+
+    l->AddEntry(gdata[i], "Data", "lp");
+    l->AddEntry(gmc[i], "MC", "lp");
+    l->AddEntry(gtemp[i], "Fit Template", "lp");
+
+    gdata[i]->GetYaxis()->SetTitle("Fractional Containment");
+    gdata[i]->GetXaxis()->SetTitle("Time Slice");
+    gdata[i]->SetTitle(title);
+    gdata[i]->GetYaxis()->SetRangeUser(-0.01,1.1);
+    gdata[i]->Draw("apl");
+    gtemp[i]->Draw("same pl");
+    gmc[i]->Draw("same pl");
+
+    l->Draw();
+
+    c1->SaveAs(pname);
+  
+    }*/
 
 }
 

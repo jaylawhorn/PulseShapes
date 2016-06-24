@@ -37,7 +37,8 @@ void makeHists(TString infile="root://eoscms//store/group/phys_susy/razor/HCALDP
   Double_t pulse[10], ped[10];
 
   chain->SetBranchAddress("iphi", &iphi);
-  chain->SetBranchAddress("iphi", &iphi);
+  chain->SetBranchAddress("ieta", &ieta);
+  chain->SetBranchAddress("depth", &depth);
   chain->SetBranchAddress("pulse", &pulse);
   chain->SetBranchAddress("ped", &ped);
 
@@ -46,10 +47,11 @@ void makeHists(TString infile="root://eoscms//store/group/phys_susy/razor/HCALDP
 
   Int_t nPulses[nbin]={0};  
   Int_t ibin[10]={0,1,2,3,4,5,6,7,8,9};
-  Double_t avgPulse[nbin][10];//, avgPulse2[nbin][10], adcUnc[nbin][10], totUnc[nbin][10]; 
+  Double_t avgPulse[nbin][10], avgPulse2[nbin][10];//, adcUnc[nbin][10], totUnc[nbin][10]; 
   Double_t ucut[nbin], lcut[nbin];
   for (UInt_t i=0; i<nbin; i++) {
-    for (UInt_t j=0; j<10; j++) {avgPulse[i][j]=0; }//avgPulse2[i][j]=0; adcUnc[i][j]=0; totUnc[i][j]=0;}
+    for (UInt_t j=0; j<10; j++) { 
+      avgPulse[i][j]=0; avgPulse2[i][j]=0; } //adcUnc[i][j]=0; totUnc[i][j]=0;}
     lcut[i]=binstart+i*binsize;  ucut[i]=binstart+(i+1)*binsize;
   }
 
@@ -63,7 +65,7 @@ void makeHists(TString infile="root://eoscms//store/group/phys_susy/razor/HCALDP
   outt->Branch("ucut",      &ucut,      "ucut[58]/D");
   outt->Branch("lcut",      &lcut,      "lcut[58]/D");
   outt->Branch("avgPulse",  &avgPulse,  "avgPulse[58][10]/D");
-  //outt->Branch("avgPulse2", &avgPulse2, "avgPulse2[58][10]/D");
+  outt->Branch("avgPulse2", &avgPulse2, "avgPulse2[58][10]/D");
   //outt->Branch("adcUnc",    &adcUnc,    "adcUnc[58][10]/D");
 
   for (UInt_t i=0; i<chain->GetEntries(); i++) {
@@ -87,8 +89,9 @@ void makeHists(TString infile="root://eoscms//store/group/phys_susy/razor/HCALDP
     nPulses[ibin]++;
 
     for (UInt_t j=0; j<10; j++) { 
+      //cout << (pulse[j]-ped)*(pulse[j]-ped)/sumQ << ", ";
       avgPulse[ibin][j]+=(pulse[j]-ped)/sumQ;
-      //avgPulse2[ibin][j]+=pulse[j]*pulse[j]/sumQ;
+      avgPulse2[ibin][j]+=(pulse[j]-ped)*(pulse[j]-ped)/sumQ;
       //adcUnc[ibin][j]+=(sigma(pulse[j])*sigma(pulse[j])+1)/(pulse[j]*pulse[j]);
     }
     
@@ -99,7 +102,8 @@ void makeHists(TString infile="root://eoscms//store/group/phys_susy/razor/HCALDP
     cout << "i : " << i << ", " << nPulses[i] << endl;
 
     for (UInt_t j=0; j<10; j++) {
-      cout << j << ", " << avgPulse[i][j]/nPulses[i] << endl;
+      cout << j << ", " << avgPulse[i][j]/nPulses[i] << ", " << sqrt(avgPulse[i][j]*avgPulse[i][j] - avgPulse2[i][j])/nPulses[i] << endl;
+      //cout << j << ", " << avgPulse[i][j] << ", " << avgPulse2[i][j] << endl;
     }
 
   }
