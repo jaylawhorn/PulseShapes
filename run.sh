@@ -17,14 +17,10 @@ eval `scramv1 runtime -sh`
 cd ${workDir}
 which root
 
-cp ${builddir}/src/PulseShapes/rmsFix.C .
-cp ${builddir}/src/PulseShapes/rootlogon.C .
+cp ${builddir}/makeSummaryTree.C .
+cp ${builddir}/rootlogon.C .
 
-root -l -q rmsFix.C+\(\"root://eoscms//eos/cms/${eosfolder}${file}\",\"${outfolder}${file}\"\)
-
-#cp Output.root ${outfolder}${file}
-
-#xrdcp Output.root root://eoscms/${outfolder}${file}
+root -l -q makeSummaryTree.C+\(\"root://eoscms//eos/cms/${eosfolder}${file}\",\"${outfolder}${file}\"\)
 
 status=`echo $?`
 echo "Status - $status"
