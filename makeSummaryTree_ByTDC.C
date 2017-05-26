@@ -19,7 +19,7 @@
 
 #endif
 
-void makeSummaryTree_ByTDC(TString outfile="sortedByTDC.root") {
+void makeSummaryTree_ByTDC(TString outfile="sortedByTDC_fix.root") {
 
 
   TChain *chain = new TChain("hcalTupleTree/tree");
@@ -99,21 +99,21 @@ void makeSummaryTree_ByTDC(TString outfile="sortedByTDC.root") {
 
       double sumFC=0;
       for (uint j=0; j<QIE11DigiFC->at(i).size(); j++) {
-sumFC+=QIE11DigiFC->at(i).at(j);
+	sumFC+=QIE11DigiFC->at(i).at(j);
       }
       if (sumFC<10000) continue;
 
       if (QIE11DigiTDC->at(i).at(4)<60) {	
 	int tdc_time=QIE11DigiTDC->at(i).at(4);
 	for (uint j=0; j<QIE11DigiFC->at(i).size(); j++) {
-	  v_p4.at(tdc_time)->Fill(j+1,QIE11DigiFC->at(i).at(j)/sumFC);
+	  v_p4.at(tdc_time)->Fill(j,QIE11DigiFC->at(i).at(j)/sumFC);
 	  //v_p4.at(tdc_time)->Fill(j,QIE11DigiFC->at(i).at(j));
 	}
       }
       else if (QIE11DigiTDC->at(i).at(4)==62 && QIE11DigiTDC->at(i).at(3)<60) {
 	int tdc_time=QIE11DigiTDC->at(i).at(3);
         for (uint j=0; j<QIE11DigiFC->at(i).size(); j++) {
-          v_p3.at(tdc_time)->Fill(j+1,QIE11DigiFC->at(i).at(j)/sumFC);
+          v_p3.at(tdc_time)->Fill(j,QIE11DigiFC->at(i).at(j)/sumFC);
 	}
 	
       }
