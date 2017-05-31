@@ -13,13 +13,15 @@
 #include <TLegend.h>
 #include <vector>
 #include <iostream>
+#include <fstream> 
+#include <sstream> 
 #include <iomanip>
 
 #include "tree.h"
 
 #endif
 
-void makeSummaryTree_ByLS(TString outfile="sortedByPhase.root") {
+void makeSummaryTree_ByLS(TString outfile="goodData/sortedByPhase_r1.root") {
 
 
   TChain *chain = new TChain("hcalTupleTree/tree");
@@ -76,92 +78,94 @@ void makeSummaryTree_ByLS(TString outfile="sortedByPhase.root") {
 
   TFile *outf = new TFile(outfile,"recreate");
 
+  vector<int> breakRun;
+  vector<int> breakLS;
+  vector<int> breakCode;
+  vector<int> breakPhase;
+  vector<int> breakPhaseMaster;
+
+  TH1D *hPhase = new TH1D("h","h",100,0,100);
+
+  ifstream ifs;
+  ifs.open("phaseScanInfo.txt");
+  assert(ifs.is_open());
+  string line;
+  while(getline(ifs,line)) {
+    if (line[0]=='#') continue;
+
+    int RUN; 
+    int LS;
+    int CODE;
+    int PHASE;
+    stringstream ss(line);
+    ss >> RUN >> LS >> CODE >> PHASE;
+    breakRun.push_back(RUN);
+    breakLS.push_back(LS);
+    breakCode.push_back(CODE);
+    breakPhase.push_back(PHASE);
+    hPhase->Fill(PHASE);
+
+  }
+
+  vector<int> map2master;
+
+  for (uint xx=0; xx<breakPhase.size(); xx++) {
+    if (breakPhase.at(xx)==0) continue;
+
+    else if (breakPhaseMaster.size()==0) breakPhaseMaster.push_back(breakPhase.at(xx));
+    else {
+      int found=0;
+      for (uint yy=0; yy<breakPhaseMaster.size(); yy++) {
+	if (breakPhase.at(xx) == breakPhaseMaster.at(yy)) {
+	  found=1;
+	  break;
+	}
+      }
+      if (found==0) breakPhaseMaster.push_back(breakPhase.at(xx));
+    }
+  }
+
+  sort( breakPhaseMaster.begin(), breakPhaseMaster.end() );
+
+  //for (uint i=0; i<breakPhaseMaster.size(); i++) {
+  // cout << breakPhaseMaster.at(i) << ", ";
+  //}
+  //cout << endl << endl;
+
+  for (uint i=0; i<breakPhase.size(); i++) {
+    if (breakPhase.at(i)==0) map2master.push_back(-1);
+    else {
+      for (uint j=0; j<breakPhaseMaster.size(); j++) {
+	if (breakPhase.at(i)==breakPhaseMaster.at(j)) {
+	  map2master.push_back(j);
+	  break;
+	}
+      }
+    }
+  }
+
   vector<TProfile *> vec;
   vector<TH1D *> vecTDC;
   vector<TH1D *> vecM0T;
-  TH2D *hTDCvM0T = new TH2D("hTDCvM0T","hTDCvM0T",150,4,7,120,-50,70);
+  vector<TH1D *> vecQ;
 
-  vector<uint> maxLS_36;
-  vector<uint> minLS_36;
-  vector<uint> maxLS_37;
-  vector<uint> minLS_37;
-  vector<uint> maxLS_39;
-  vector<uint> minLS_39;
-  vector<uint> maxLS_40;
-  vector<uint> minLS_40;
-
-  minLS_36.push_back(0);   maxLS_36.push_back(66);
-  minLS_36.push_back(67);  maxLS_36.push_back(79);
-  minLS_36.push_back(80);  maxLS_36.push_back(92);
-  minLS_36.push_back(93);  maxLS_36.push_back(105);
-  minLS_36.push_back(106); maxLS_36.push_back(1000);
-
-  int n36=minLS_36.size();
-
-  minLS_37.push_back(0);   maxLS_37.push_back(51);
-  minLS_37.push_back(52);  maxLS_37.push_back(64);
-  minLS_37.push_back(65);  maxLS_37.push_back(76);
-  minLS_37.push_back(77);  maxLS_37.push_back(89);
-  minLS_37.push_back(90);  maxLS_37.push_back(102);
-  minLS_37.push_back(103); maxLS_37.push_back(115);
-  minLS_37.push_back(116); maxLS_37.push_back(128);
-  minLS_37.push_back(129); maxLS_37.push_back(141);
-  minLS_37.push_back(142); maxLS_37.push_back(154);
-  minLS_37.push_back(154); maxLS_37.push_back(167);
-  minLS_37.push_back(168); maxLS_37.push_back(180);
-  minLS_37.push_back(181); maxLS_37.push_back(193);
-  minLS_37.push_back(194); maxLS_37.push_back(206);
-  minLS_37.push_back(207); maxLS_37.push_back(219);
-  minLS_37.push_back(220); maxLS_37.push_back(232);
-  minLS_37.push_back(233); maxLS_37.push_back(245);
-  minLS_37.push_back(246); maxLS_37.push_back(1000);
-
-  int n37=minLS_37.size();
-
-  minLS_39.push_back(4);  maxLS_39.push_back(16);
-  minLS_39.push_back(17); maxLS_39.push_back(29);
-  minLS_39.push_back(30); maxLS_39.push_back(42);
-  minLS_39.push_back(43); maxLS_39.push_back(55);
-  minLS_39.push_back(56); maxLS_39.push_back(68);
-  minLS_39.push_back(69); maxLS_39.push_back(1000);
-
-  int n39=minLS_39.size();
-
-  minLS_40.push_back(0); maxLS_40.push_back(12);
-  minLS_40.push_back(111); maxLS_40.push_back(118);
-  minLS_40.push_back(119); maxLS_40.push_back(131);
-  minLS_40.push_back(132); maxLS_40.push_back(144);
-  minLS_40.push_back(145); maxLS_40.push_back(157);
-  minLS_40.push_back(158); maxLS_40.push_back(170);
-  minLS_40.push_back(171); maxLS_40.push_back(183);
-  minLS_40.push_back(184); maxLS_40.push_back(196);
-  minLS_40.push_back(197); maxLS_40.push_back(209);
-  minLS_40.push_back(210); maxLS_40.push_back(222);
-  minLS_40.push_back(223); maxLS_40.push_back(235);
-  minLS_40.push_back(236); maxLS_40.push_back(248);
-  minLS_40.push_back(249); maxLS_40.push_back(261);
-  minLS_40.push_back(262); maxLS_40.push_back(274);
-  minLS_40.push_back(275); maxLS_40.push_back(287);
-  minLS_40.push_back(288); maxLS_40.push_back(300);
-  minLS_40.push_back(301); maxLS_40.push_back(1000);
-
-  int n40=minLS_40.size();
-
-  for (int i=0; i<n36+n37+n39+n40; i++) {
-    char pname[10];
-    sprintf(pname,"vec_%i",i);
-    vec.push_back(new TProfile(pname,pname,10,-0.5,9.5,"s"));
-    sprintf(pname,"vecTDC_%i",i);
+  for (uint xx=0; xx<breakPhaseMaster.size(); xx++) {
+    char pname[50];
+    sprintf(pname,"avgPulse_%i",breakPhaseMaster.at(xx));
+    vec.push_back(new TProfile(pname,pname,10,-0.5,9.5));
+    sprintf(pname,"distTDC_%i",breakPhaseMaster.at(xx));
     vecTDC.push_back(new TH1D(pname,pname,120,-50,70));
-    sprintf(pname,"vecM0T_%i",i);
-    vecM0T.push_back(new TH1D(pname,pname,150,4,7));
+    sprintf(pname,"distM0T_%i",breakPhaseMaster.at(xx));
+    vecM0T.push_back(new TH1D(pname,pname,100,4,6));
+    sprintf(pname,"distCharge_%i",breakPhaseMaster.at(xx));
+    vecQ.push_back(new TH1D(pname,pname,100,0,50000));
+
   }
 
-  for (UInt_t i=0; i<chain->GetEntries(); i++) {
+  for (uint i=0; i<chain->GetEntries(); i++) {
+    //for (uint i=10000; i<10100; i++) {
     chain->GetEntry(i);
-
-    if (i%1000000==0) cout << 100*i/float(chain->GetEntries()) << endl;
-
+    if (i%1000000==0) cout << 100*i/float(chain->GetEntries()) << endl;                                                                                            
     if (QIE11DigiIEta->size()==0) continue;
 
     for (uint i=0; i<QIE11DigiFC->size(); i++) {
@@ -172,83 +176,50 @@ void makeSummaryTree_ByLS(TString outfile="sortedByPhase.root") {
 	sumFC+=QIE11DigiFC->at(i).at(j);
 	m0T+=j*QIE11DigiFC->at(i).at(j);
       }
-
       m0T/=sumFC;
 
-      if (sumFC<10000) continue;
+      if (sumFC<5000) continue;
 
-      //cout << run << ", " << ls << endl;
-      int val=0;
-      if (run==294736) {
-	for (int j=0; j<n36; j++) {
-	  if (ls>=minLS_36.at(j) && ls<maxLS_36.at(j)) {
-	    if (QIE11DigiTDC->at(i).at(4)!=62)
-	      val=QIE11DigiTDC->at(i).at(4); 
-	    else
-	      val=QIE11DigiTDC->at(i).at(3)-50;
-	    for (int x=0; x<10; x++) {
-	      vec.at(j)->Fill(x,QIE11DigiFC->at(i).at(x)/sumFC);
-	    }
-	    vecTDC.at(j)->Fill(val);
-	    vecM0T.at(j)->Fill(m0T);
-	    hTDCvM0T->Fill(m0T, val);
-	  }
-	}
-      }
-      else if (run==294737) {
-	for (int j=0; j<n37; j++) {
-	  if (ls>=minLS_37.at(j) && ls<maxLS_37.at(j)) {
-	    if (QIE11DigiTDC->at(i).at(4)!=62)
-	      val=QIE11DigiTDC->at(i).at(4);
-	    else
-	      val=QIE11DigiTDC->at(i).at(3)-50;
-	    for (int x=0; x<10; x++) {
-	      vec.at(n36+j)->Fill(x,QIE11DigiFC->at(i).at(x)/sumFC);
-	    }
-	    vecTDC.at(n36+j)->Fill(val);
-	    vecM0T.at(n36+j)->Fill(m0T);
-	    hTDCvM0T->Fill(m0T, val);
-	  }
-	}
-      }
-      else if (run==294739) {
-	for (int j=0; j<n39; j++) {
-	  if (ls>=minLS_39.at(j) && ls<maxLS_39.at(j)) {
-	    if (QIE11DigiTDC->at(i).at(4)!=62)
-              val=QIE11DigiTDC->at(i).at(4);
-	    else
-              val=QIE11DigiTDC->at(i).at(3)-50;
+      //cout << "-----" << endl;
 
-	    for (int x=0; x<10; x++) {
-	      vec.at(n36+n37+j)->Fill(x,QIE11DigiFC->at(i).at(x)/sumFC);
-	    }
-	    vecTDC.at(n36+n37+j)->Fill(val);
-	    vecM0T.at(n36+n37+j)->Fill(m0T);
-	    hTDCvM0T->Fill(m0T,val);
-	  }
+      uint code=(run-294000)*1000+ls;
+      //cout << run << ", " << ls << ", " << code << endl;
+
+      int p0=-1;
+      for (uint xx=0; xx<breakCode.size(); xx++) {
+	//cout <<"!!!!! " << xx << " " << code << " " << breakCode.at(xx)  << endl;
+	if (p0==-1 && code<breakCode.at(xx)) {
+	  if (xx!=0 && code==breakCode.at(xx-1)) break;
+	  //cout << "!!!!! " << xx << " " << code << " " << breakCode.at(xx) << endl;
+	  p0=xx-1;
+	  break;
 	}
       }
-      else if (run==294740) {
-	for (int j=0; j<n40; j++) {
-	  if (ls>=minLS_40.at(j) && ls<maxLS_40.at(j)) {
-	    if (QIE11DigiTDC->at(i).at(4)!=62)
-	      val=QIE11DigiTDC->at(i).at(4);
-	    else
-	      val=QIE11DigiTDC->at(i).at(3)-50;
-	    for (int x=0; x<10; x++) {
-	      vec.at(n36+n37+n39+j)->Fill(x,QIE11DigiFC->at(i).at(x)/sumFC);
-	    }
-	    vecTDC.at(n36+n37+n39+j)->Fill(val);
-	    vecM0T.at(n36+n37+n39+j)->Fill(m0T);
-	    hTDCvM0T->Fill(m0T,val);
-	  }
-	}
+      //cout<< "i survivvvvvved " << p0 << endl;
+      if (p0==-1) continue;
+      if (breakPhase.at(p0)==0) continue;
+
+      //if (breakPhase.at(p0)==34) continue;//cout << code << ", " << run << ", " << ls << endl;
+
+      //cout << p0 << ", " << breakPhase.at(p0) << endl;
+
+      int k = map2master.at(p0);
+      //cout << k << endl;
+      for (uint j=0; j<QIE11DigiFC->at(i).size(); j++) {
+	vec.at(k)->Fill(j,QIE11DigiFC->at(i).at(j)/sumFC);
       }
+
+      int tdc_time=-100;
+      if (QIE11DigiTDC->at(i).at(4)!=62) tdc_time=QIE11DigiTDC->at(i).at(4);
+      else if (QIE11DigiTDC->at(i).at(3)<60) tdc_time=QIE11DigiTDC->at(i).at(3)-50;
+
+      vecTDC.at(k)->Fill(tdc_time);
+      vecM0T.at(k)->Fill(m0T);
+      vecQ.at(k)->Fill(sumFC);
 
     }
 
   }
-
 
   outf->Write();
   outf->Close();
