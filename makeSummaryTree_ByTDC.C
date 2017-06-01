@@ -15,24 +15,24 @@
 #include <iostream>
 #include <iomanip>
 
-#include "tree.h"
+//#include "tree.h"
 
 #endif
 
-void makeSummaryTree_ByTDC(TString outfile="sortedByTDC_fix.root") {
+void makeSummaryTree_ByTDC(TString outfile="goodData/sortedByTDC_r2.root") {
 
 
   TChain *chain = new TChain("hcalTupleTree/tree");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias10.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias1.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias2.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias3.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias4.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias5.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias6.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias7.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias8.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias9.root");
+  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias10_r2.root");
+  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias1_r2.root");
+  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias2_r2.root");
+  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias3_r2.root");
+  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias4_r2.root");
+  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias5_r2.root");
+  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias6_r2.root");
+  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias7_r2.root");
+  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias8_r2.root");
+  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias9_r2.root");
 
   vector<vector<double> > *QIE11DigiFC=0;
   Int_t           laserType=0;
@@ -101,7 +101,8 @@ void makeSummaryTree_ByTDC(TString outfile="sortedByTDC_fix.root") {
       for (uint j=0; j<QIE11DigiFC->at(i).size(); j++) {
 	sumFC+=QIE11DigiFC->at(i).at(j);
       }
-      if (sumFC<10000) continue;
+      if (sumFC<5000) continue;
+      //if (sumFC<10000) continue;
 
       if (QIE11DigiTDC->at(i).at(4)<60) {	
 	int tdc_time=QIE11DigiTDC->at(i).at(4);
