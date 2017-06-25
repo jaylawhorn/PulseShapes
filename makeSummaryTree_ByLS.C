@@ -21,20 +21,20 @@
 
 #endif
 
-void makeSummaryTree_ByLS(TString outfile="goodData/sortedByPhase_r1.root") {
+void makeSummaryTree_ByLS(TString outfile="foobie.root") {
 
 
   TChain *chain = new TChain("hcalTupleTree/tree");
   chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias10.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias1.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias2.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias3.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias4.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias5.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias6.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias7.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias8.root");
-  chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias9.root");
+  //chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias1.root");
+  //chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias2.root");
+  //chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias3.root");
+  //chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias4.root");
+  //chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias5.root");
+  //chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias6.root");
+  //chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias7.root");
+  //chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias8.root");
+  //chain->AddFile("root://eoscms//store/user/jlawhorn/HEP17_PHASE_SCAN/ZeroBias9.root");
 
   vector<vector<double> > *QIE11DigiFC=0;
   Int_t           laserType=0;
@@ -127,10 +127,10 @@ void makeSummaryTree_ByLS(TString outfile="goodData/sortedByPhase_r1.root") {
 
   sort( breakPhaseMaster.begin(), breakPhaseMaster.end() );
 
-  //for (uint i=0; i<breakPhaseMaster.size(); i++) {
-  // cout << breakPhaseMaster.at(i) << ", ";
-  //}
-  //cout << endl << endl;
+  for (uint i=0; i<breakPhaseMaster.size(); i++) {
+    cout << breakPhaseMaster.at(i) << ", ";
+  }
+  cout << endl << endl;
 
   for (uint i=0; i<breakPhase.size(); i++) {
     if (breakPhase.at(i)==0) map2master.push_back(-1);
