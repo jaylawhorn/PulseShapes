@@ -1,6 +1,6 @@
 {
 
-  gROOT->Macro("HcalPulseShape.cc+");
-  gROOT->Macro("HcalPulseShapes.cc+");
+  gROOT->Macro("CalStyleRemix.cc+");
+  //gROOT->Macro("HcalPulseShapes.cc+");
 
 }

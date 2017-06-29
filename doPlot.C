@@ -90,31 +90,31 @@ void doPlot() {
   diff->GetXaxis()->SetRangeUser(75,250);
 
   diff->Draw("hist");
-  gMC->Draw("lsame");
-  gEmp->Draw("lsame");
+  //gMC->Draw("lsame");
+  //gEmp->Draw("lsame");
 
 
   TLegend *leg = new TLegend(0.64, 0.6, 0.93, 0.9);
   leg->SetShadowColor(0);
   leg->SetLineColor(0);
   leg->AddEntry(diff, "Data","l");
-  leg->AddEntry(gMC,  "Current MC","l");
-  leg->AddEntry(gEmp, "New Fit","l");
+  //leg->AddEntry(gMC,  "Current MC","l");
+  //leg->AddEntry(gEmp, "New Fit","l");
 
   leg->Draw();
 
-  char land[500];
-  sprintf(land, "f(t) = %.2f * TMath::Landau(t, mpv=%.2f, sigma=%.2f)", f2->GetParameter(0), f2->GetParameter(1), f2->GetParameter(2));
+  //char land[500];
+  //sprintf(land, "f(t) = %.2f * TMath::Landau(t, mpv=%.2f, sigma=%.2f)", f2->GetParameter(0), f2->GetParameter(1), f2->GetParameter(2));
+  //
+  ////cout << land << endl;
+  //TLatex* latex = new TLatex;
+  //latex->SetNDC();
+  //latex->SetTextSize(0.035);
+  //latex->SetTextColor(kBlue);
+  //latex->DrawLatex(.22, .2, land);
+  //latex->Draw();
 
-  //cout << land << endl;
-  TLatex* latex = new TLatex;
-  latex->SetNDC();
-  latex->SetTextSize(0.035);
-  latex->SetTextColor(kBlue);
-  latex->DrawLatex(.22, .2, land);
-  latex->Draw();
-
-  c1->SaveAs("new_pulse_shape.png");
+  c1->SaveAs("new_pulse_shape_nofits.png");
 
 }
 

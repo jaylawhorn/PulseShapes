@@ -1,8 +1,5 @@
-# PulseShapes
-fitting energy dependence for 2015/6 HBHE
+makeSummaryTree_ByLS.C
+makeSummaryTree_ByTDC.C
 
-(1) makeSummaryTree.C (submit.sh/run.sh)
+doDifferences.C
 
-(2) use hadd to combine all output files
-
-(3) doStatistics.C for pulse fraction fits
