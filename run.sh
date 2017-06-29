@@ -17,10 +17,10 @@ eval `scramv1 runtime -sh`
 cd ${workDir}
 which root
 
-cp ${builddir}/makeSummaryTree.C .
+cp ${builddir}/makeRecHitTree.C .
 cp ${builddir}/rootlogon.C .
 
-root -l -q makeSummaryTree.C+\(\"root://eoscms//eos/cms/${eosfolder}${file}\",\"${outfolder}${file}\"\)
+root -l -q makeRecHitTree.C+\(\"${eosfolder}${file}\",\"${outfolder}${file}\"\)
 
 status=`echo $?`
 echo "Status - $status"
